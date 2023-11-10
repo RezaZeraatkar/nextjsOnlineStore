@@ -1,6 +1,7 @@
-# NextStore: (under development)
+# Nextjs Online Store: (under development)
 
-NextStore is a robust online store built using the latest features of Next.js and a sophisticated app router system. This project provides a seamless shopping experience, leveraging the power of modern web technologies.
+Nextjs Online Store is a robust online store built using the latest features of Next.js and a its app router system. This project provides a seamless shopping experience, leveraging the power of modern web technologies.
+**You can see app Demo at [https://nextjs-online-store.vercel.app/]**
 
 ## Features
 
