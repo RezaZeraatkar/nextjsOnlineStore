@@ -7,7 +7,6 @@ export const ToastNotifier: React.FC<NotificationProps> = ({
   message,
   status,
 }) => {
-  console.log('toastnot');
   const notify = useToastNotifications();
   const firstRender = useRef(true);
 
