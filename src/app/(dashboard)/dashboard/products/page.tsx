@@ -13,7 +13,7 @@ export default async function Products() {
   const products: IProduct[] = await product.find().lean();
 
   return (
-    <div className='flex w-full flex-col gap-4'>
+    <div className='flex w-full w-full flex-col gap-4'>
       <div>
         <Link className='btn-primary' href='products/new'>
           Add a new product

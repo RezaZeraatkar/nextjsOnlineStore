@@ -6,6 +6,11 @@ import dbConnect from '@/services/db/mongoConnection';
 import { ResponseType } from '@/types/interfaces/formactions';
 import { IProduct, productSchema } from '@/types/interfaces/product';
 import { revalidatePath } from 'next/cache';
+import { v2 as cloudinary } from 'cloudinary';
+import {
+  ICloudinaryImageUploadResponse,
+  ICloudinarySignature,
+} from '@/types/interfaces/cloudinary';
 
 export async function createOrUpdateProduct(
   productId: string | null | undefined,
@@ -125,4 +130,45 @@ export async function deleteProduct(
       },
     };
   }
+}
+
+const cloudinaryConfig = cloudinary.config({
+  cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUDNAME,
+  api_key: process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+  secure: true,
+});
+
+export async function getSignature() {
+  const timestamp = Math.round(new Date().getTime() / 1000);
+
+  const signature = cloudinary.utils.api_sign_request(
+    {
+      timestamp,
+      folder: process.env.NEXT_PUBLIC_CLOUDINARY_FOLDER,
+    },
+    process.env.CLOUDINARY_API_SECRET!
+  );
+  const resonse: ICloudinarySignature = { timestamp, signature };
+
+  return resonse;
+}
+
+export async function saveToDatabase(
+  imgData: (ICloudinaryImageUploadResponse | undefined)[]
+) {
+  const cloudinary_secret_key = process.env.CLOUDINARY_API_SECRET;
+  if (!cloudinary_secret_key) {
+    throw new Error('cloudinary secret key is undefined!');
+  }
+  // verify the data
+  // const expectedSignature = cloudinary.utils.api_sign_request(
+  //   { public_id, version },
+  //   cloudinary_secret_key
+  // );
+
+  // if (expectedSignature === signature) {
+  //   // safe to write to database
+  //   console.log({ url });
+  // }
 }

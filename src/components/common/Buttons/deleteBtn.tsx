@@ -3,7 +3,7 @@
 import React from 'react';
 import Button from '.';
 import Modal, { useModal } from '@/components/modal/Modal';
-import { deleteProduct } from '@/app/(dashboard)/dashboard/products/actions';
+import { deleteProduct } from '@/app/(dashboard)/dashboard/products/_actions';
 import { IProduct } from '@/types/interfaces/product';
 import SubmitButton from '@/components/SubmitButton/submitButton';
 import {

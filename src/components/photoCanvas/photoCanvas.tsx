@@ -7,7 +7,7 @@ interface IPhotoCanvasProps {
 
 export default function PhotoCanvas({ url }: IPhotoCanvasProps) {
   return (
-    <div className='relative p-1'>
+    <div className='relative flex-wrap p-1'>
       <div>
         {url ? (
           <Image
