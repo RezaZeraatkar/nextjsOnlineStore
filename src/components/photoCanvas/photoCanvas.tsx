@@ -7,7 +7,6 @@ interface IPhotoCanvasProps {
 }
 
 export default function PhotoCanvas({ url }: IPhotoCanvasProps) {
-  console.log(url);
   return (
     <div className='z-0 flex-wrap p-1'>
       {url ? (

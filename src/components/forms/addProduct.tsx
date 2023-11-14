@@ -36,35 +36,35 @@ export function AddProductForm({ product }: { product: IProduct }) {
   return (
     <div className='mt-3 flex w-full flex-col gap-6'>
       <div className='flex flex-col'>
-        <div className='fixed inset-x-0 top-0 z-40 ml-64 flex h-auto items-center justify-between bg-blue-200 p-4 pt-20 shadow-md'>
-          <div>
-            <h1 className='pt-2 font-extrabold'>
-              {productIdParam ? 'Edit' : 'Add'} Product Informations
-            </h1>
-          </div>
-          <div className='flex flex-col gap-2'>
-            <SubmitButton
-              icon={<PlusIcon />}
-              isloading={false}
-              type='submit'
-              className='btn-primary mt-2'
-            >
-              {productIdParam ? 'Edit Product' : 'Add product'}
-            </SubmitButton>
-            <Link
-              href='/dashboard/products'
-              className='text-sm text-yellow-600 hover:underline'
-            >
-              &larr; back to products page
-            </Link>
-          </div>
-        </div>
-        <div className='flex items-start justify-center gap-2 pt-24'>
-          <form
-            action={formAction}
-            className='flex w-2/3 flex-col gap-2 border border-x-0 border-y-0 border-b-[1px] pb-10'
-          >
+        <form
+          action={formAction}
+          className='flex flex-col gap-2 border border-x-0 border-y-0 border-b-[1px] pb-10'
+        >
+          <div className='fixed inset-x-0 top-0 z-40 ml-64 flex h-auto items-center justify-between bg-blue-200 p-4 pt-20 shadow-md'>
             <div>
+              <h1 className='pt-2 font-extrabold'>
+                {productIdParam ? 'Edit' : 'Add'} Product Informations
+              </h1>
+            </div>
+            <div className='flex flex-col gap-2'>
+              <SubmitButton
+                icon={<PlusIcon />}
+                isloading={false}
+                type='submit'
+                className='btn-primary mt-2'
+              >
+                {productIdParam ? 'Edit Product' : 'Add product'}
+              </SubmitButton>
+              <Link
+                href='/dashboard/products'
+                className='text-sm text-yellow-600 hover:underline'
+              >
+                &larr; back to products page
+              </Link>
+            </div>
+          </div>
+          <div className='flex items-start justify-center gap-2 pt-24'>
+            <div className='flex w-2/3 gap-2 border-r pr-2'>
               <div className='mt-2'>
                 <TextInput
                   id='product_name'
@@ -117,16 +117,16 @@ export function AddProductForm({ product }: { product: IProduct }) {
                 />
               </div>
             </div>
-            <ToastNotifier
-              status={state.status}
-              success={success}
-              message={success ? state?.message : state?.error?.message}
-            />
-          </form>
-          <UploadedImages product={product} />
-        </div>
-        <UploadImage productId={success ? state.data._id : productIdParam} />
+            <UploadedImages product={product} />
+          </div>
+        </form>
       </div>
+      <UploadImage productId={success ? state.data._id : productIdParam} />
+      <ToastNotifier
+        status={state.status}
+        success={success}
+        message={success ? state?.message : state?.error?.message}
+      />
     </div>
   );
 }
