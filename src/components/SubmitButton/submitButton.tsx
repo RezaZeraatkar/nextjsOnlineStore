@@ -15,6 +15,7 @@ interface ISubmitButtonProps
 export default function SubmitButton({
   children,
   icon,
+  isloading,
   ...props
 }: ISubmitButtonProps) {
   const { pending } = useFormStatus();
@@ -22,7 +23,7 @@ export default function SubmitButton({
   return (
     <button aria-disabled={pending} disabled={pending} {...props}>
       <div className='flex items-center justify-center'>
-        <>{props?.isloading || pending ? <Spinner /> : icon}</>
+        <>{isloading || pending ? <Spinner /> : icon}</>
         {children}
       </div>
     </button>

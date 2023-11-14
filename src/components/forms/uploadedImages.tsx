@@ -8,11 +8,12 @@ import {
   saveToDatabase,
 } from '@/app/(dashboard)/dashboard/products/_actions';
 import { ICloudinaryImageUploadResponse } from '@/types/interfaces/cloudinary';
-import { UploadIcon } from '../common/icons';
+import { CameraIcon, UploadIcon } from '../common/icons';
 import StatusMessage from '../common/statusMessage/statusMessage';
+import { IProduct } from '@/types/interfaces/product';
 
-interface IuploadImageProps {
-  productId: string | null;
+interface IuploadedImagesProps {
+  product: IProduct;
 }
 
 // File handling functions
@@ -72,7 +73,7 @@ const createFormData = (
   return formData;
 };
 
-export default function UploadImage({ productId }: IuploadImageProps) {
+export default function UploadedImages({ product }: IuploadedImagesProps) {
   const [open, setOpen] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
@@ -165,9 +166,9 @@ export default function UploadImage({ productId }: IuploadImageProps) {
 
     try {
       const results = await Promise.all(responses);
-      if (results?.length && productId) {
+      if (results?.length && product._id) {
         // uploading images to cloudinary was successful. so update the product with these images
-        await saveToDatabase(results, productId);
+        await saveToDatabase(results, product._id);
       } else {
         setOpen(false);
         setErrorMessage(
@@ -188,60 +189,30 @@ export default function UploadImage({ productId }: IuploadImageProps) {
       setIsLoading(false);
       setOpen(false);
     }
-  }, [imgFiles, productId]);
+  }, [imgFiles, product._id]);
 
   useEffect(() => {
-    if (!!productId) {
+    if (!!product._id) {
       setIsLoading(true);
       imageFileUploader();
     }
-  }, [setIsLoading, imageFileUploader, productId]);
+  }, [setIsLoading, imageFileUploader, product._id]);
 
   return (
-    <div className='w-full'>
-      <h1 className='font-extrabold'>Upload new product photos</h1>
+    <div className='flex w-1/3 flex-col'>
+      <h1 className='flex items-center font-extrabold'>
+        <CameraIcon className='mr-2 h-6 w-6' />{' '}
+        <span>Product uploaded photos</span>
+      </h1>
       <div className='flex flex-col justify-between gap-2 md:w-full md:flex-row'>
-        <div className='mb-0 w-full md:w-1/5'>
-          <label className='flex flex-col items-center justify-center rounded-md bg-gray-200 p-2 text-center text-gray-500'>
-            <span className='flex cursor-pointer flex-col items-center justify-center rounded-md border border-dashed border-gray-500'>
-              <UploadIcon />
-              <p className='mb-1 mt-0 text-sm text-yellow-800'>
-                upload only image files less than 1mb in size. Limited up to 3
-                photo files!
-              </p>
-              <input
-                name='file'
-                type='file'
-                className='hidden'
-                ref={inputFileRef}
-                onChange={handleInputFiles}
-                accept='image/*'
-                multiple
-                required
-              />
-            </span>
-            {/* <SubmitButton
-              icon={<CameraIcon />}
-              isloading={isLoading}
-              onClick={handleUploadPhotos}
-              className='btn-primary mt-2 flex items-center'
-            >
-              {productId ? 'Edit photos' : 'Upload photos'}
-            </SubmitButton> */}
-            <p className='text-red-500'>{errorMessage || null}</p>
-          </label>
-        </div>
         {/* Preview images */}
-        <div className='relative flex w-full flex-wrap gap-2 rounded-md border border-gray-200 px-2 pt-12 md:w-4/5'>
-          <div className='absolute left-2 top-0 text-sm text-gray-300'>
-            Total files(in MB): {totalSizeInMB}
-          </div>
-          {imgFiles?.map((file, idx) => {
+        <div className='relative flex w-full flex-wrap gap-2 rounded-md border border-gray-200 px-2'>
+          {product.product_images?.map((url, idx) => {
             return (
               <div key={idx} className='relative'>
-                <PhotoCanvas url={URL.createObjectURL(file)} />
+                <PhotoCanvas url={url} />
                 <button
-                  className='absolute -right-1 -top-1 h-5 w-5 rounded-full border bg-red-500 text-sm text-white opacity-70'
+                  className='absolute -right-1 -top-1 h-5 w-5 rounded-full border bg-red-500 text-sm text-white'
                   onClick={(e) => {
                     e.stopPropagation();
                     setImgFile((prev) => {
@@ -257,9 +228,11 @@ export default function UploadImage({ productId }: IuploadImageProps) {
               </div>
             );
           })}
-          {!imgFiles && (
-            <div className='absolute inset-0 flex items-center justify-center rounded-md'>
-              <p className='p-8 font-bold text-gray-300'>Images Preview</p>
+          {!product.product_images?.length && (
+            <div className='absolute inset-0 top-3 flex items-center justify-center rounded-md'>
+              <p className='font-bold text-red-500'>
+                No images uploaded for this product yet!
+              </p>
             </div>
           )}
           {imgFiles && (

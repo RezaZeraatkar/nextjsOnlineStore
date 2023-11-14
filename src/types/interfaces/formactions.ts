@@ -14,12 +14,14 @@ interface SuccessResponse<T> {
   success: true;
   status: Status;
   data: T;
+  metadata?: any;
   message: string | null;
 }
 
 interface ErrorResponse {
   success: false;
   status: Status;
+  metadata?: any;
   error: IError;
 }
 

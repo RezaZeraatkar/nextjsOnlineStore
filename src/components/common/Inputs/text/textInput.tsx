@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { forwardRef, Ref } from 'react';
 
 interface InputProps extends React.HTMLProps<HTMLInputElement> {
   id: string;
@@ -6,16 +6,15 @@ interface InputProps extends React.HTMLProps<HTMLInputElement> {
   error: string | null;
 }
 
-export const TextInput: React.FC<InputProps> = ({
-  id,
-  label,
-  error,
-  ...props
-}) => (
-  <>
-    <label htmlFor={id}>
-      {label} <span className='text-red-500'>{error || null}</span>
-    </label>
-    <input type='text' id={id} {...props} />
-  </>
+export const TextInput = forwardRef<HTMLInputElement, InputProps>(
+  function InputElement({ id, label, error, ...props }, ref) {
+    return (
+      <>
+        <label htmlFor={id}>
+          {label} <span className='text-red-500'>{error || null}</span>
+        </label>
+        <input type='text' id={id} {...props} ref={ref} />
+      </>
+    );
+  }
 );

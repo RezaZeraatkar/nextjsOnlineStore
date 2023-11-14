@@ -12,8 +12,29 @@ import {
   ICloudinarySignature,
 } from '@/types/interfaces/cloudinary';
 
+const cloudinaryConfig = cloudinary.config({
+  cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUDNAME,
+  api_key: process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+  secure: true,
+});
+
+type CloudinaryEnpointTypes = 'delete' | 'upload';
+
+// Cloudinary functions
+export const getCloudinaryConfig = (endpointType: CloudinaryEnpointTypes) => {
+  const endpoint =
+    endpointType === 'upload'
+      ? process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_URL
+      : process.env.NEXT_PUBLIC_CLOUDINARY_DELETE_URL;
+  const api_key = process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY;
+  const cloudinary_folder = process.env.NEXT_PUBLIC_CLOUDINARY_FOLDER;
+
+  return { endpoint, api_key, cloudinary_folder };
+};
+
 export async function createOrUpdateProduct(
-  productId: string | null | undefined,
+  { productId, step }: { productId: string | null | undefined; step: number },
   prevState: any,
   formData: FormData
 ): Promise<ResponseType<IProduct>> {
@@ -35,6 +56,17 @@ export async function createOrUpdateProduct(
 
   const data = result?.data;
 
+  if (!data)
+    return {
+      success: false,
+      status: 400,
+      error: {
+        status: 400,
+        message: 'Invalid Inputs!',
+        fields: result?.errorData,
+      },
+    };
+
   try {
     // connection to atlas mongodb
     await dbConnect();
@@ -53,7 +85,10 @@ export async function createOrUpdateProduct(
           product_description: productDoc?.product_description,
           product_price: productDoc?.product_price,
         },
-        message: `Product ${data?.product_name} added successfully`,
+        metadata: {
+          step: step,
+        },
+        message: `Product ${data?.product_name} added successfully.`,
       };
     } else {
       productDoc = await Product.findOneAndUpdate(
@@ -61,6 +96,7 @@ export async function createOrUpdateProduct(
         { $set: data }, // update
         { upsert: true, new: true } // options
       );
+
       revalidatePath('/products');
       return {
         success: true,
@@ -132,13 +168,6 @@ export async function deleteProduct(
   }
 }
 
-const cloudinaryConfig = cloudinary.config({
-  cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUDNAME,
-  api_key: process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-  secure: true,
-});
-
 export async function getSignature() {
   const timestamp = Math.round(new Date().getTime() / 1000);
 
@@ -155,20 +184,142 @@ export async function getSignature() {
 }
 
 export async function saveToDatabase(
-  imgData: (ICloudinaryImageUploadResponse | undefined)[]
-) {
+  imgData: (ICloudinaryImageUploadResponse | undefined)[],
+  productId: string
+): Promise<ResponseType<IProduct>> {
   const cloudinary_secret_key = process.env.CLOUDINARY_API_SECRET;
   if (!cloudinary_secret_key) {
     throw new Error('cloudinary secret key is undefined!');
   }
   // verify the data
-  // const expectedSignature = cloudinary.utils.api_sign_request(
-  //   { public_id, version },
-  //   cloudinary_secret_key
-  // );
+  const verifiedImgUrls = imgData.map((photo) => {
+    if (photo) {
+      const expectedSignature = cloudinary.utils.api_sign_request(
+        { public_id: photo.public_id, version: photo.version },
+        cloudinary_secret_key
+      );
+      if (expectedSignature === photo.signature) {
+        // safe to write to database
+        return { url: photo.url, public_id: photo.public_id };
+      }
+    }
+  });
 
-  // if (expectedSignature === signature) {
-  //   // safe to write to database
-  //   console.log({ url });
-  // }
+  // update the product document in db with these images
+  if (verifiedImgUrls.length > 0) {
+    // Filter out items where url or public_id is undefined or null
+    const filteredImgUrls = verifiedImgUrls.filter(
+      (item): item is { url: string; public_id: string } =>
+        typeof item?.url === 'string' && typeof item?.public_id === 'string'
+    );
+
+    try {
+      // connect to database
+      await dbConnect();
+      // first remove all the products on the cloudinary
+      // 1. select all the product images from databse
+      const product: IProduct | null = await Product.findById(productId);
+
+      if (product) {
+        // Separate the urls and public_ids into two arrays
+        const product_images = filteredImgUrls.map((item) => item?.url);
+        const product_images_public_id = filteredImgUrls.map(
+          (item) => item?.public_id
+        );
+        // Append new images to the existing ones
+        let newProductData: {
+          product_images: string[];
+          product_images_public_id: string[];
+        };
+        if (
+          product?.product_images !== undefined &&
+          product?.product_images?.length > 0 &&
+          product?.product_images_public_id !== undefined &&
+          product?.product_images_public_id?.length > 0 &&
+          product_images.length > 0
+        ) {
+          newProductData = {
+            product_images: [...product.product_images, ...product_images],
+            product_images_public_id: [
+              ...product.product_images_public_id,
+              ...product_images_public_id,
+            ],
+          };
+        } else {
+          newProductData = {
+            product_images: product_images,
+            product_images_public_id: product_images_public_id,
+          };
+        }
+
+        // 3. update product image public ids and urls
+        const updatedProduct = await Product.findByIdAndUpdate(
+          productId,
+          newProductData,
+          { new: true }
+        );
+        if (updatedProduct._id) {
+          return {
+            success: true,
+            status: 201,
+            data: {
+              _id: updatedProduct._id.toString(),
+              product_name: updatedProduct.product_name,
+              product_description: updatedProduct.product_name,
+              product_price: updatedProduct.product_price,
+            },
+            message: 'Images Uploaded Successfully',
+          };
+        } else {
+          return {
+            success: false,
+            status: 404,
+            error: {
+              status: 404,
+              message:
+                'No product founded to udpdate. please create product first!',
+            },
+          };
+        }
+
+        // if (public_ids) {
+        // cloudinary.api
+        //   .delete_resources(public_ids, {
+        //     type: 'upload',
+        //     resource_type: 'image',
+        //   })
+        //   .then(console.log);
+        // }
+      } else {
+        return {
+          success: false,
+          status: 404,
+          error: {
+            status: 404,
+            message: 'No product founded',
+          },
+        };
+      }
+    } catch (error) {
+      console.error(error);
+      return {
+        success: false,
+        status: 500,
+        error: {
+          status: 500,
+          message: 'faild to update images for this product for this product',
+        },
+      };
+    }
+  } else {
+    // there is no images. return
+    return {
+      success: false,
+      status: 404,
+      error: {
+        status: 404,
+        message: 'No images have been selected to upload for this product',
+      },
+    };
+  }
 }

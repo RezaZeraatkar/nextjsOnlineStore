@@ -1,57 +1,65 @@
-import React, { useState, ReactNode } from 'react';
+'use client';
+import { ReactNode } from 'react';
 
-interface IMultiStepFormProps {
+interface IMultiStepForm {
+  step: number;
   showStepNumber: boolean;
-  forms: ReactNode[];
+  nextStep: () => void;
+  prevStep: () => void;
+  isPrevDisabled: boolean;
+  isNextDisabled: boolean;
+  isSkipStep: boolean;
+  currentElement: ReactNode;
 }
 
 export default function MultiStepForm({
-  forms,
+  step,
   showStepNumber,
-}: IMultiStepFormProps) {
-  const [step, setStep] = useState(0);
-
-  const nextStep = () => {
-    if (step < forms.length - 1) {
-      setStep(step + 1);
-    }
-  };
-
-  const prevStep = () => {
-    if (step > 0) {
-      setStep(step - 1);
-    }
-  };
-
+  nextStep,
+  prevStep,
+  isPrevDisabled,
+  isNextDisabled,
+  isSkipStep,
+  currentElement,
+}: IMultiStepForm) {
   return (
     <div className='w-full rounded-md bg-white p-4 shadow-md'>
       {showStepNumber && (
         <p className='mb-4 text-lg font-bold'>Step {step + 1}</p>
       )}
-      <div className='mb-4 w-full'>{forms[step]}</div>
+      <div className='mb-4 w-full'>{currentElement}</div>
       <div className='flex justify-between'>
         <button
           onClick={prevStep}
-          disabled={step === 0}
+          disabled={isPrevDisabled}
           className={`rounded-md px-4 py-2 ${
-            step === 0
+            isPrevDisabled
               ? 'cursor-not-allowed bg-gray-300'
-              : 'bg-blue-500 text-white'
+              : 'bg-blue-900 text-white'
           }`}
         >
           Previous
         </button>
-        <button
-          onClick={nextStep}
-          disabled={step === forms.length - 1}
-          className={`rounded-md px-4 py-2 ${
-            step === forms.length - 1
-              ? 'cursor-not-allowed bg-gray-300'
-              : 'bg-blue-500 text-white'
-          }`}
-        >
-          Next
-        </button>
+        {isSkipStep ? (
+          <button
+            onClick={nextStep}
+            className='rounded-md bg-blue-900 px-4 py-2 text-white'
+          >
+            Skip
+          </button>
+        ) : (
+          <button
+            onClick={nextStep}
+            disabled={isNextDisabled}
+            className={`rounded-md px-4 py-2 ${
+              isNextDisabled
+                ? 'cursor-not-allowed bg-gray-300'
+                : 'bg-blue-900 text-white'
+            }`}
+          >
+            Next
+          </button>
+        )}
       </div>
     </div>
   );

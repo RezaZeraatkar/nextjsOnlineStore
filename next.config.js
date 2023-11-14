@@ -6,6 +6,9 @@ const nextConfig = {
     esmExternals: 'loose',
     serverComponentsExternalPackages: ['mongoose'],
   },
+  images: {
+    domains: ['res.cloudinary.com'],
+  },
   // webpack: (config) => {
   //   config.experiments = {
   //     topLevelAwait: true,
