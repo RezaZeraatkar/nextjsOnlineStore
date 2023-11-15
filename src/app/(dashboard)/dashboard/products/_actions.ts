@@ -105,8 +105,6 @@ export async function createOrUpdateProduct(
     let productDoc: IProduct;
     if (!productId) {
       productDoc = await Product.create({ ...data, user: user_id });
-      console.log(productDoc);
-      console.log(productDoc?.user?.toString());
       revalidatePath('/products');
       return {
         success: true,

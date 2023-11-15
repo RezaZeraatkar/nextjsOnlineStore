@@ -18,10 +18,10 @@ export default async function Products() {
     // redirect user back to home page and destroy the current session
     throw new Error('You have to signup first!');
   }
-  const currentUser: IUser = await user.find({ userId }).lean();
+  const currentUser: IUser = await user.findOne({ userId }).lean();
   // get products
   const products: IProduct[] = await product
-    .find({ user: currentUser?._id })
+    .find({ user: currentUser?._id?.toString() })
     .lean();
 
   return (
