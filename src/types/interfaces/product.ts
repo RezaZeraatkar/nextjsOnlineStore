@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import { z } from 'zod';
 
 // Product type defenitions
@@ -16,4 +17,5 @@ export interface IProduct extends Product {
   product_price: number;
   product_images?: string[];
   product_images_public_id?: string[];
+  user: typeof mongoose.Schema.Types.ObjectId;
 }
