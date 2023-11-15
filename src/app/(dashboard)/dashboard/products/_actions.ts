@@ -1,5 +1,5 @@
 'use server';
-
+import { auth, currentUser } from '@clerk/nextjs';
 import { safeParser } from '@/lib/zodSafeParser';
 import Product from '@/services/db/models/product';
 import dbConnect from '@/services/db/mongoConnection';
@@ -11,6 +11,8 @@ import {
   ICloudinaryImageUploadResponse,
   ICloudinarySignature,
 } from '@/types/interfaces/cloudinary';
+import user from '@/services/db/models/user';
+import { IUser } from '@/types/interfaces/user';
 
 const cloudinaryConfig = cloudinary.config({
   cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUDNAME,
@@ -67,6 +69,34 @@ export async function createOrUpdateProduct(
       },
     };
 
+  // got the userId from the session
+  const { userId } = auth();
+  if (!userId) {
+    // redirect user back to home page and destroy the current session
+    return {
+      success: false,
+      status: 401,
+      error: {
+        status: 401,
+        message: 'User is not logged in!',
+      },
+    };
+  }
+
+  const userDoc = (await user.findOne({ userId: userId })) as IUser;
+  if (!userDoc) {
+    return {
+      success: false,
+      status: 404,
+      error: {
+        status: 404,
+        message: 'User not found. you have to signup again.',
+      },
+    };
+  }
+
+  const user_id = userDoc._id;
+
   try {
     // connection to atlas mongodb
     await dbConnect();
@@ -74,7 +104,7 @@ export async function createOrUpdateProduct(
     // create or update
     let productDoc: IProduct;
     if (!productId) {
-      productDoc = await Product.create(data);
+      productDoc = await Product.create({ ...data, user: user_id });
       revalidatePath('/products');
       return {
         success: true,
@@ -84,6 +114,7 @@ export async function createOrUpdateProduct(
           product_name: productDoc?.product_name,
           product_description: productDoc?.product_description,
           product_price: productDoc?.product_price,
+          user: productDoc?.user,
         },
         metadata: {
           step: step,
@@ -106,6 +137,7 @@ export async function createOrUpdateProduct(
           product_name: productDoc?.product_name,
           product_description: productDoc?.product_description,
           product_price: productDoc?.product_price,
+          user: productDoc?.user,
         },
         message: `Product ${data?.product_name} updated successfully`,
       };
@@ -151,6 +183,7 @@ export async function deleteProduct(
           product_name: product?.product_name,
           product_description: product?.product_description,
           product_price: 10,
+          user: product?.user,
         },
         message: `Product ${product?.product_name} deleted successfully`,
       };
@@ -267,6 +300,7 @@ export async function saveToDatabase(
               product_name: updatedProduct.product_name,
               product_description: updatedProduct.product_name,
               product_price: updatedProduct.product_price,
+              user: updatedProduct?.user,
             },
             message: 'Images Uploaded Successfully',
           };
