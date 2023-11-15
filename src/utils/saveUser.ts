@@ -11,7 +11,6 @@ export default async function saveUser(user: any) {
       firstname: user.firstName,
       lastname: user.lastName,
       imageUrl: user.imageUrl,
-      emailAddress: 'test',
     };
 
     await User.findOneAndUpdate(

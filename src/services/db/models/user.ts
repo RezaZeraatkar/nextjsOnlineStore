@@ -3,12 +3,11 @@ import { IUser } from '@/types/interfaces/user';
 
 const UserSchema = new mongoose.Schema<IUser>(
   {
-    userId: { type: String, required: true }, // array of strings to hold multiple images
+    userId: { type: String, required: true },
     firstname: { type: String },
     lastname: { type: String },
     username: { type: String },
-    emailAddress: { type: String }, // array of strings to hold multiple images
-    imageUrl: { type: String }, // new field for product category
+    imageUrl: { type: String },
   },
   { timestamps: true }
 );
