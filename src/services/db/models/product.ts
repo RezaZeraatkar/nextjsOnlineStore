@@ -6,9 +6,13 @@ const ProductSchema = new mongoose.Schema<IProduct>(
     product_name: { type: String, required: true },
     product_description: { type: String, required: true },
     product_price: { type: Number, required: true },
-    product_images: { type: [String] }, // array of strings to hold multiple images
-    product_images_public_id: { type: [String] }, // array of strings to hold multiple images
-    // product_category: { type: String, required: true }, // new field for product category
+    product_images: { type: [String] },
+    product_images_public_id: { type: [String] },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    },
+    // product_category: { type: String, required: true },
   },
   { timestamps: true }
 );
