@@ -5,7 +5,6 @@ import User from '@/services/db/models/user';
 export default async function saveUser(user: any) {
   try {
     await dbConnect();
-    console.log(user);
     const newUser: IUser = {
       userId: user.id,
       username: user.username,

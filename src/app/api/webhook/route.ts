@@ -4,7 +4,6 @@ import { WebhookEvent } from '@clerk/nextjs/server';
 import saveUser from '@/utils/saveUser';
 
 export async function POST(req: Request) {
-  console.log('Webhook Running');
   // You can find this in the Clerk Dashboard -> Webhooks -> choose the webhook
   const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
 
