@@ -1,4 +1,4 @@
-import { IError, ResponseType } from '@/types/interfaces/formactions';
+import { IError } from '@/types/interfaces/formactions';
 
 interface SuccessParams {
   success: true;
@@ -14,20 +14,3 @@ interface ErrorParams {
 }
 
 export type ResponseParams = SuccessParams | ErrorParams;
-
-// export function createActionResponse(params: ResponseParams): ResponseType {
-//   const { data, success, message } = params;
-
-//   if (!success) {
-//     return {
-//       success,
-//       error,
-//     };
-//   } else {
-//     return {
-//       data,
-//       success,
-//       message,
-//     };
-//   }
-// }

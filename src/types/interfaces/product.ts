@@ -17,5 +17,5 @@ export interface IProduct extends Product {
   product_price: number;
   product_images?: string[];
   product_images_public_id?: string[];
-  user: typeof mongoose.Schema.Types.ObjectId;
+  user: mongoose.Schema.Types.ObjectId | string;
 }

@@ -16,8 +16,10 @@ export default async function AddProduct({
     // fetch product data for productId
     await dbConnect();
     product = (await Product.findById(productId).lean()) as IProduct;
-    if (product) product._id = product._id.toString();
-    else
+    if (product) {
+      product.user = product?.user.toString();
+      product._id = product?._id.toString();
+    } else
       return (
         <div>
           No products Found! Go to{' '}

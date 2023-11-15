@@ -105,6 +105,8 @@ export async function createOrUpdateProduct(
     let productDoc: IProduct;
     if (!productId) {
       productDoc = await Product.create({ ...data, user: user_id });
+      console.log(productDoc);
+      console.log(productDoc?.user?.toString());
       revalidatePath('/products');
       return {
         success: true,
@@ -114,7 +116,7 @@ export async function createOrUpdateProduct(
           product_name: productDoc?.product_name,
           product_description: productDoc?.product_description,
           product_price: productDoc?.product_price,
-          user: productDoc?.user,
+          user: productDoc?.user?.toString(),
         },
         metadata: {
           step: step,
@@ -137,7 +139,7 @@ export async function createOrUpdateProduct(
           product_name: productDoc?.product_name,
           product_description: productDoc?.product_description,
           product_price: productDoc?.product_price,
-          user: productDoc?.user,
+          user: productDoc?.user?.toString(),
         },
         message: `Product ${data?.product_name} updated successfully`,
       };
@@ -179,11 +181,11 @@ export async function deleteProduct(
         success: true,
         status: 200,
         data: {
-          _id: product?._id,
+          _id: product?._id?.toString(),
           product_name: product?.product_name,
           product_description: product?.product_description,
           product_price: 10,
-          user: product?.user,
+          user: product?.user?.toString(),
         },
         message: `Product ${product?.product_name} deleted successfully`,
       };
@@ -300,7 +302,7 @@ export async function saveToDatabase(
               product_name: updatedProduct.product_name,
               product_description: updatedProduct.product_name,
               product_price: updatedProduct.product_price,
-              user: updatedProduct?.user,
+              user: updatedProduct?.user?.toString(),
             },
             message: 'Images Uploaded Successfully',
           };
@@ -315,15 +317,6 @@ export async function saveToDatabase(
             },
           };
         }
-
-        // if (public_ids) {
-        // cloudinary.api
-        //   .delete_resources(public_ids, {
-        //     type: 'upload',
-        //     resource_type: 'image',
-        //   })
-        //   .then(console.log);
-        // }
       } else {
         return {
           success: false,

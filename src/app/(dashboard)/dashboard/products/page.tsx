@@ -16,11 +16,13 @@ export default async function Products() {
   const { userId } = auth();
   if (!userId) {
     // redirect user back to home page and destroy the current session
-    throw new Error("You have to signup first!");
+    throw new Error('You have to signup first!');
   }
-  const currentUser: IUser[] = await user.find({ userId }).lean();
+  const currentUser: IUser = await user.find({ userId }).lean();
   // get products
-  const products: IProduct[] = await product.find({ user: currentUser }).lean();
+  const products: IProduct[] = await product
+    .find({ user: currentUser?._id })
+    .lean();
 
   return (
     <div className='flex w-full flex-col gap-4'>
