@@ -12,7 +12,7 @@ The Nextjs Online Store Dashboard is a robust platform designed to manage an onl
 
 ## Tech Stack
 
-- **Next.js**: Used for server-side rendering, static site generation, and the overall app structure.
+- **Next.js with typescript**: Used for server-side rendering, static site generation, and the overall app structure.
 - **React**: Powers the UI components of the application.
 - **Styled Components and tailwindcss**: Handles styling.
 - **Vercel**: Used for app deployment and hosting.
