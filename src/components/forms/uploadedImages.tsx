@@ -42,7 +42,7 @@ export default function UploadedImages({ product }: IuploadedImagesProps) {
   };
 
   return (
-    <div className='flex w-1/3 flex-col'>
+    <div className='flex w-5/12 flex-col'>
       <h1 className='flex items-center font-extrabold'>
         {isLoading ? <Spinner /> : <CameraIcon className='mr-2 h-6 w-6' />}{' '}
         <span>Product uploaded photos</span>

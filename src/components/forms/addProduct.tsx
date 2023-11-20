@@ -64,7 +64,7 @@ export function AddProductForm({ product }: { product: IProduct }) {
             </div>
           </div>
           <div className='flex items-start justify-center gap-2 pt-24'>
-            <div className='flex w-2/3 gap-2 border-r pr-2'>
+            <div className='flex w-7/12 gap-2 border-r pr-2'>
               <div className='mt-2'>
                 <TextInput
                   id='product_name'
