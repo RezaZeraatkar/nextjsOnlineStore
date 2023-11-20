@@ -10,6 +10,7 @@ import {
 import { ICloudinaryImageUploadResponse } from '@/types/interfaces/cloudinary';
 import { CameraIcon, UploadIcon } from '../common/icons';
 import StatusMessage from '../common/statusMessage/statusMessage';
+import { useToastNotifications } from '@/hooks/useToastNotifications';
 
 interface IuploadImageProps {
   productId: string | null;
@@ -74,7 +75,7 @@ const createFormData = (
 
 export default function UploadImage({ productId }: IuploadImageProps) {
   const [open, setOpen] = useState(false);
-
+  const notify = useToastNotifications();
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [imgFiles, setImgFile] = useState<File[] | null>(null);
@@ -167,7 +168,21 @@ export default function UploadImage({ productId }: IuploadImageProps) {
       const results = await Promise.all(responses);
       if (results?.length && productId) {
         // uploading images to cloudinary was successful. so update the product with these images
-        await saveToDatabase(results, productId);
+        const res = await saveToDatabase(results, productId);
+        // notify success uploaded message to the user
+        if (res.success) {
+          return notify({
+            message: res?.message || '',
+            status: res?.status,
+            success: res?.success,
+          });
+        } else {
+          return notify({
+            success: res?.success,
+            status: res?.status,
+            message: res?.error?.message,
+          });
+        }
       } else {
         setOpen(false);
         setErrorMessage(
@@ -188,7 +203,7 @@ export default function UploadImage({ productId }: IuploadImageProps) {
       setIsLoading(false);
       setOpen(false);
     }
-  }, [imgFiles, productId]);
+  }, [imgFiles, productId, notify]);
 
   return (
     <div className='w-full'>
