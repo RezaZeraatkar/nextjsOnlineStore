@@ -2,13 +2,11 @@ import { StatusCode } from '@/types/enums';
 
 export type Status = StatusCode | 'initial_render';
 
-export type IError =
-  | {
-      status: Status;
-      message: string;
-      fields?: Record<string, string>;
-    }
-  | false;
+export type IError = {
+  status: Status;
+  message: string;
+  fields?: Record<string, string>;
+};
 
 interface SuccessResponse<T> {
   success: true;
