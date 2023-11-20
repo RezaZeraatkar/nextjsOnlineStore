@@ -67,7 +67,7 @@ export default function UploadedImages({ product }: IuploadedImagesProps) {
             );
           })}
           {!newProduct.product_images?.length && (
-            <div className='absolute inset-0 top-3 flex items-center justify-center rounded-md'>
+            <div className='top-3 flex items-center justify-center rounded-md'>
               <p className='font-bold text-red-500'>
                 No images uploaded for this product yet!
               </p>
