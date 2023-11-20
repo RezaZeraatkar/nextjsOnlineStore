@@ -20,7 +20,7 @@ import UploadedImages from './uploadedImages';
 
 const initialState: ResponseType<IProduct> = {
   success: false,
-  error: false,
+  error: { status: 100, message: '' },
   status: 'initial_render',
 };
 
