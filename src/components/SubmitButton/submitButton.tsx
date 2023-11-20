@@ -22,9 +22,9 @@ export default function SubmitButton({
 
   return (
     <button aria-disabled={pending} disabled={pending} {...props}>
-      <div className='flex items-center justify-center'>
+      <div className='flex items-center justify-center gap-1'>
         <>{isloading || pending ? <Spinner /> : icon}</>
-        {children}
+        <>{children}</>
       </div>
     </button>
   );

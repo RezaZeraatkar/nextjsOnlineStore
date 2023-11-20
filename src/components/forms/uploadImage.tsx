@@ -8,7 +8,7 @@ import {
   saveToDatabase,
 } from '@/app/(dashboard)/dashboard/products/_actions';
 import { ICloudinaryImageUploadResponse } from '@/types/interfaces/cloudinary';
-import { UploadIcon } from '../common/icons';
+import { CameraIcon, UploadIcon } from '../common/icons';
 import StatusMessage from '../common/statusMessage/statusMessage';
 
 interface IuploadImageProps {
@@ -190,13 +190,6 @@ export default function UploadImage({ productId }: IuploadImageProps) {
     }
   }, [imgFiles, productId]);
 
-  useEffect(() => {
-    if (!!productId) {
-      setIsLoading(true);
-      imageFileUploader();
-    }
-  }, [setIsLoading, imageFileUploader, productId]);
-
   return (
     <div className='w-full'>
       <h1 className='font-extrabold'>Upload new product photos</h1>
@@ -220,14 +213,14 @@ export default function UploadImage({ productId }: IuploadImageProps) {
                 required
               />
             </span>
-            {/* <SubmitButton
-              icon={<CameraIcon />}
+            <SubmitButton
+              icon={<CameraIcon className='h-5 w-5' />}
               isloading={isLoading}
-              onClick={handleUploadPhotos}
-              className='btn-primary mt-2 flex items-center'
+              onClick={imageFileUploader}
+              className='btn-primary mt-2 w-full'
             >
               {productId ? 'Edit photos' : 'Upload photos'}
-            </SubmitButton> */}
+            </SubmitButton>
             <p className='text-red-500'>{errorMessage || null}</p>
           </label>
         </div>
