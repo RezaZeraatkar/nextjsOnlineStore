@@ -1,20 +1,18 @@
-# Nextjs Online Store: (under development)
-
-Nextjs Online Store is a robust online store built using the latest features of Next.js and a its app router system. This project provides a seamless shopping experience, leveraging the power of modern web technologies.
+# Nextjs Online Store Dashboard (Under Development)
+The Nextjs Online Store Dashboard is a robust platform designed to manage an online store. It’s currently under development and once completed, it will allow users to create different products and categories for their online store.
 **You can see app Demo at [https://nextjs-online-store.vercel.app/]**
 
-## Features
+## Features of the dashboard
 
-- **Product Listing**: Displays a list of products with essential details like name, price, and thumbnail image.
-- **Product Details**: Each product has a dedicated page showing detailed information, including descriptions, images, and customer reviews.
-- **Shopping Cart**: Allows customers to add products to a cart, adjust quantities, and proceed to checkout.
-- **Checkout Process**: Includes customer information collection, payment processing, and order confirmation.
-- **User Authentication**: Supports user registration, login, and profile management.
-- **Responsive Design**: Ensures a smooth shopping experience on both desktop and mobile devices.
+- **Product managment**: Displays a list of products with essential details like name, price, image and so on and also enables the user to created products and update them.
+- **User Authentication**: Supports user registration, login, and profile management through **clerk**.
+- **Category Management**: Enables users to create and manage various categories for their products.
+- **Order Reporting**: Provides a comprehensive report of orders placed on the online store.
+- **Settings**: Allows users to customize various aspects of their online store.
 
 ## Tech Stack
 
-- **Next.js**: Used for server-side rendering, static site generation, and the overall app structure.
+- **Next.js with typescript**: Used for server-side rendering, static site generation, and the overall app structure.
 - **React**: Powers the UI components of the application.
 - **Styled Components and tailwindcss**: Handles styling.
 - **Vercel**: Used for app deployment and hosting.
