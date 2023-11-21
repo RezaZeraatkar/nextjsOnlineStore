@@ -17,6 +17,7 @@ import Link from 'next/link';
 import UploadImage from './uploadImage';
 import { PlusIcon } from '@/components/common/icons';
 import UploadedImages from './uploadedImages';
+import { Suspense, useState } from 'react';
 
 const initialState: ResponseType<IProduct> = {
   success: false,
@@ -31,6 +32,7 @@ export function AddProductForm({ product }: { product: IProduct }) {
     step: 1,
   });
   const [state, formAction] = useFormState(updateProductWithId, initialState);
+  const [onSuccessUploadImages, setOnSuccessUploadImages] = useState(0);
   const { success, error } = state;
 
   return (
@@ -117,11 +119,20 @@ export function AddProductForm({ product }: { product: IProduct }) {
                 />
               </div>
             </div>
-            <UploadedImages product={product} />
+            <Suspense fallback={'loading ...'}>
+              <UploadedImages
+                productId={product._id}
+                onSuccessUploadImages={onSuccessUploadImages}
+              />
+            </Suspense>
           </div>
         </form>
       </div>
-      <UploadImage productId={success ? state.data._id : productIdParam} />
+      <UploadImage
+        productId={success ? state.data._id : productIdParam}
+        setOnSuccessUploadImages={setOnSuccessUploadImages}
+        onSuccessUploadImages={onSuccessUploadImages}
+      />
       <ToastNotifier
         status={state.status}
         success={success}

@@ -50,9 +50,10 @@ export default function Table({ products }: ItableProps) {
                       <DeleteBtn
                         product={{
                           _id: product._id.toString(),
-                          product_name: product.product_name,
-                          product_description: product.product_description,
+                          product_name: product?.product_name,
+                          product_description: product?.product_description,
                           product_price: product.product_price,
+                          user: product?.user?.toString(),
                         }}
                       />
                     </div>

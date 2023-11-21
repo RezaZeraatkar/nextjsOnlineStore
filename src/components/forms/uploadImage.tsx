@@ -1,6 +1,13 @@
 'use client';
 
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import SubmitButton from '../SubmitButton/submitButton';
 import PhotoCanvas from '../photoCanvas/photoCanvas';
 import {
@@ -14,6 +21,8 @@ import { useToastNotifications } from '@/hooks/useToastNotifications';
 
 interface IuploadImageProps {
   productId: string | null;
+  onSuccessUploadImages: number;
+  setOnSuccessUploadImages: Dispatch<SetStateAction<number>>;
 }
 
 // File handling functions
@@ -73,7 +82,11 @@ const createFormData = (
   return formData;
 };
 
-export default function UploadImage({ productId }: IuploadImageProps) {
+export default function UploadImage({
+  productId,
+  setOnSuccessUploadImages,
+  onSuccessUploadImages,
+}: IuploadImageProps) {
   const [open, setOpen] = useState(false);
   const notify = useToastNotifications();
   const [isLoading, setIsLoading] = useState(false);
@@ -171,6 +184,7 @@ export default function UploadImage({ productId }: IuploadImageProps) {
         const res = await saveToDatabase(results, productId);
         // notify success uploaded message to the user
         if (res.success) {
+          setOnSuccessUploadImages(onSuccessUploadImages + 1);
           return notify({
             message: res?.message || '',
             status: res?.status,
@@ -203,7 +217,13 @@ export default function UploadImage({ productId }: IuploadImageProps) {
       setIsLoading(false);
       setOpen(false);
     }
-  }, [imgFiles, productId, notify]);
+  }, [
+    imgFiles,
+    productId,
+    notify,
+    setOnSuccessUploadImages,
+    onSuccessUploadImages,
+  ]);
 
   return (
     <div className='w-full'>

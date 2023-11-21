@@ -1,4 +1,5 @@
 import { AddProductForm } from '@/components/forms/addProduct';
+import { getProduct } from '@/serverActions/getProduct';
 import Product from '@/services/db/models/product';
 import dbConnect from '@/services/db/mongoConnection';
 import { IProduct } from '@/types/interfaces/product';
@@ -13,16 +14,13 @@ export default async function AddProduct({
   let product = {} as IProduct;
 
   if (productId !== 'new') {
-    // fetch product data for productId
-    await dbConnect();
-    product = (await Product.findById(productId).lean()) as IProduct;
-    if (product) {
-      product.user = product?.user.toString();
-      product._id = product?._id.toString();
+    const productRes = await getProduct(productId);
+    if (productRes.success) {
+      product = productRes.data;
     } else
       return (
         <div>
-          No products Found! Go to{' '}
+          No product Found! Go to{' '}
           <Link className='text-blue-900 underline' href='/dashboard/products'>
             Product Page
           </Link>{' '}

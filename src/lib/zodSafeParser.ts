@@ -9,7 +9,7 @@ export const safeParser = <IProduct>(schema: Schema, formdata: FormData) => {
       data: result as IProduct,
     };
   } catch (error: any) {
-    console.log('safeParser Error: ', error);
+    console.error('safeParser Error: ', error);
     // constructing a unified error
     const normalizedErrors: Record<string, string> = {};
     for (const err of error.issues) {
