@@ -52,7 +52,7 @@ export function AddProductForm({ product }: { product: IProduct }) {
               </h1>
             </div>
             <div className='flex flex-col gap-2'>
-              {success ? null : (
+              {success && !productIdParam ? null : (
                 <SubmitButton
                   icon={<PlusIcon />}
                   isloading={false}
@@ -79,15 +79,17 @@ export function AddProductForm({ product }: { product: IProduct }) {
               <div className='mt-2'>
                 <div className='flex items-center justify-between'>
                   <h1 className='font-extrabold'>Product Informations</h1>
-                  <button
-                    className='flex rounded-md border border-gray-100 p-1 text-gray-700'
-                    onClick={() => {
-                      ref.current?.reset();
-                    }}
-                  >
-                    <PlusIcon />
-                    Add a new product
-                  </button>
+                  {!productIdParam && (
+                    <button
+                      className='flex rounded-md border border-gray-100 p-1 text-gray-700'
+                      onClick={() => {
+                        ref.current?.reset();
+                      }}
+                    >
+                      <PlusIcon />
+                      Add a new product
+                    </button>
+                  )}
                 </div>
                 <TextInput
                   id='product_name'
@@ -103,7 +105,7 @@ export function AddProductForm({ product }: { product: IProduct }) {
                   className='p-1'
                   placeholder='Product name'
                   error={error?.fields?.product_name || null}
-                  disabled={success}
+                  disabled={success && !productIdParam}
                   required
                 />
                 <TextAreaField
@@ -120,7 +122,7 @@ export function AddProductForm({ product }: { product: IProduct }) {
                   className='p-1'
                   placeholder='Product description'
                   error={error?.fields?.product_description || null}
-                  disabled={success}
+                  disabled={success && !productIdParam}
                   required
                 />
                 <NumberInput
@@ -138,7 +140,7 @@ export function AddProductForm({ product }: { product: IProduct }) {
                   placeholder='Product price (in USD)'
                   error={error?.fields?.product_price || null}
                   min={0}
-                  disabled={success}
+                  disabled={success && !productIdParam}
                   required
                 />
               </div>
