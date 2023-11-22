@@ -4,6 +4,7 @@ import {
   // @ts-expect-error
   experimental_useFormState as useFormState,
 } from 'react-dom';
+import { useRef } from 'react';
 import { createOrUpdateProduct } from '@/app/(dashboard)/dashboard/products/_actions';
 import SubmitButton from '@/components/SubmitButton/submitButton';
 
@@ -32,6 +33,7 @@ export function AddProductForm({ product }: { product: IProduct }) {
     step: 1,
   });
   const [state, formAction] = useFormState(updateProductWithId, initialState);
+  const ref = useRef<HTMLFormElement>(null);
   const [onSuccessUploadImages, setOnSuccessUploadImages] = useState(0);
   const { success, error } = state;
 
@@ -40,6 +42,7 @@ export function AddProductForm({ product }: { product: IProduct }) {
       <div className='flex flex-col'>
         <form
           action={formAction}
+          ref={ref}
           className='flex flex-col gap-2 border border-x-0 border-y-0 border-b-[1px] pb-10'
         >
           <div className='fixed inset-x-0 top-0 z-40 ml-64 flex h-auto items-center justify-between bg-blue-200 p-4 pt-20 shadow-md'>
@@ -49,14 +52,16 @@ export function AddProductForm({ product }: { product: IProduct }) {
               </h1>
             </div>
             <div className='flex flex-col gap-2'>
-              <SubmitButton
-                icon={<PlusIcon />}
-                isloading={false}
-                type='submit'
-                className='btn-primary mt-2'
-              >
-                {productIdParam ? 'Edit Product' : 'Add product'}
-              </SubmitButton>
+              {success ? null : (
+                <SubmitButton
+                  icon={<PlusIcon />}
+                  isloading={false}
+                  type='submit'
+                  className='btn-primary mt-2'
+                >
+                  {productIdParam ? 'Edit Product' : 'Add product'}
+                </SubmitButton>
+              )}
               <Link
                 href='/dashboard/products'
                 className='text-sm text-yellow-600 hover:underline'
@@ -72,7 +77,18 @@ export function AddProductForm({ product }: { product: IProduct }) {
               } gap-2 border-r pr-2`}
             >
               <div className='mt-2'>
-                <h1 className='font-extrabold'>Product Informations</h1>
+                <div className='flex items-center justify-between'>
+                  <h1 className='font-extrabold'>Product Informations</h1>
+                  <button
+                    className='flex rounded-md border border-gray-100 p-1 text-gray-700'
+                    onClick={() => {
+                      ref.current?.reset();
+                    }}
+                  >
+                    <PlusIcon />
+                    Add a new product
+                  </button>
+                </div>
                 <TextInput
                   id='product_name'
                   name='product_name'
@@ -87,6 +103,7 @@ export function AddProductForm({ product }: { product: IProduct }) {
                   className='p-1'
                   placeholder='Product name'
                   error={error?.fields?.product_name || null}
+                  disabled={success}
                   required
                 />
                 <TextAreaField
@@ -103,6 +120,7 @@ export function AddProductForm({ product }: { product: IProduct }) {
                   className='p-1'
                   placeholder='Product description'
                   error={error?.fields?.product_description || null}
+                  disabled={success}
                   required
                 />
                 <NumberInput
@@ -120,6 +138,7 @@ export function AddProductForm({ product }: { product: IProduct }) {
                   placeholder='Product price (in USD)'
                   error={error?.fields?.product_price || null}
                   min={0}
+                  disabled={success}
                   required
                 />
               </div>
