@@ -87,7 +87,7 @@ export function AddProductForm({ product }: { product: IProduct }) {
                       }}
                     >
                       <PlusIcon />
-                      Add a new product
+                      Reset form
                     </button>
                   )}
                 </div>
