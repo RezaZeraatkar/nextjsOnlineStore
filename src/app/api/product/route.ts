@@ -66,7 +66,7 @@ export async function GET(request: NextRequest) {
   let response: ResponseType<IProduct>;
   const productId = request.nextUrl.searchParams.get('productId');
 
-  if (!productId) {
+  if (!productId || productId.length <= 0) {
     response = {
       status: 404,
       success: false,
@@ -77,6 +77,7 @@ export async function GET(request: NextRequest) {
     };
     return Response.json(response);
   }
+
   try {
     const productRes = await getProduct(productId);
     if (productRes.success) {

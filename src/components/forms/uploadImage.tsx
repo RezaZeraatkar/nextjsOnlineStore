@@ -228,6 +228,12 @@ export default function UploadImage({
   return (
     <div className='w-full'>
       <h1 className='font-extrabold'>Upload new product photos</h1>
+      {productId ? null : (
+        <p className='text-sm text-red-500'>
+          Note! in order to be able uploading product photos, you have to first
+          add product form above!
+        </p>
+      )}
       <div className='flex flex-col justify-between gap-2 md:w-full md:flex-row'>
         <div className='mb-0 w-full md:w-1/5'>
           <label className='flex flex-col items-center justify-center rounded-md bg-gray-200 p-2 text-center text-gray-500'>
@@ -248,14 +254,20 @@ export default function UploadImage({
                 required
               />
             </span>
-            <SubmitButton
-              icon={<CameraIcon className='h-5 w-5' />}
-              isloading={isLoading}
-              onClick={imageFileUploader}
-              className='btn-primary mt-2 w-full'
-            >
-              {productId ? 'Edit photos' : 'Upload photos'}
-            </SubmitButton>
+            {!!productId ? (
+              <SubmitButton
+                icon={<CameraIcon className='h-5 w-5' />}
+                isloading={isLoading}
+                onClick={imageFileUploader}
+                className={`${
+                  !!productId ? 'btn-primary' : 'bg-gray-200'
+                } mt-2 w-full`}
+              >
+                Upload photos
+              </SubmitButton>
+            ) : (
+              'Upload photos'
+            )}
             <p className='text-red-500'>{errorMessage || null}</p>
           </label>
         </div>

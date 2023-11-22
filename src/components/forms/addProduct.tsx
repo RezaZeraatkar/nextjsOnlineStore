@@ -66,8 +66,13 @@ export function AddProductForm({ product }: { product: IProduct }) {
             </div>
           </div>
           <div className='flex items-start justify-center gap-2 pt-24'>
-            <div className='flex w-7/12 gap-2 border-r pr-2'>
+            <div
+              className={`flex ${
+                product._id ? 'w-7/12' : 'w-full'
+              } gap-2 border-r pr-2`}
+            >
               <div className='mt-2'>
+                <h1 className='font-extrabold'>Product Informations</h1>
                 <TextInput
                   id='product_name'
                   name='product_name'
@@ -119,17 +124,19 @@ export function AddProductForm({ product }: { product: IProduct }) {
                 />
               </div>
             </div>
-            <Suspense fallback={'loading ...'}>
-              <UploadedImages
-                productId={product._id}
-                onSuccessUploadImages={onSuccessUploadImages}
-              />
-            </Suspense>
+            {product._id && (
+              <Suspense fallback={'loading ...'}>
+                <UploadedImages
+                  productId={product._id}
+                  onSuccessUploadImages={onSuccessUploadImages}
+                />
+              </Suspense>
+            )}
           </div>
         </form>
       </div>
       <UploadImage
-        productId={success ? state.data._id : productIdParam}
+        productId={success ? state?.data?._id : productIdParam}
         setOnSuccessUploadImages={setOnSuccessUploadImages}
         onSuccessUploadImages={onSuccessUploadImages}
       />
