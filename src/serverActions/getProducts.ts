@@ -6,8 +6,11 @@ import { IProduct } from '@/types/interfaces/product';
 import { IUser } from '@/types/interfaces/user';
 import { auth, redirectToSignIn } from '@clerk/nextjs';
 
-export const getProducts = async (): Promise<ResponseType<IProduct[]>> => {
+export const getProducts = async (
+  q: string
+): Promise<ResponseType<IProduct[]>> => {
   try {
+    const searchQuery = new RegExp(q, 'i');
     await dbConnect();
     // get user _id
     const { userId } = auth();
@@ -20,6 +23,7 @@ export const getProducts = async (): Promise<ResponseType<IProduct[]>> => {
       // get products
       const products: IProduct[] = await Product.find({
         user: currentUser?._id?.toString(),
+        product_name: { $regex: searchQuery },
       }).lean();
 
       return {

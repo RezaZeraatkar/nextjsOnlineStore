@@ -1,20 +1,21 @@
 import React, { Suspense } from 'react';
-import Link from 'next/link';
-import Table from './table';
+import Table from '@/app/(dashboard)/dashboard/products/table';
 import Loader from '@/components/common/Loader/loader';
 import { getProducts } from '@/serverActions/getProducts';
 
-export default async function Products() {
-  const productsRes = await getProducts();
+export default async function Products({
+  searchParams,
+}: {
+  searchParams: {
+    q: string | null;
+  };
+}) {
+  const q = searchParams?.q || '';
+  const productsRes = await getProducts(q);
 
   if (productsRes.success)
     return (
-      <div className='flex w-full flex-col gap-4'>
-        <div>
-          <Link className='btn-primary' href='products/new'>
-            Add a new product
-          </Link>
-        </div>
+      <div className='flex w-full flex-col'>
         <Suspense fallback={<Loader />}>
           <Table products={productsRes?.data} />
         </Suspense>

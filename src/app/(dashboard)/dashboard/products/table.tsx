@@ -3,6 +3,7 @@ import Link from 'next/link';
 
 import { IProduct } from '@/types/interfaces/product';
 import DeleteBtn from '@/components/common/Buttons/deleteBtn';
+import Search from '@/components/search/search';
 
 interface ItableProps {
   products: IProduct[];
@@ -11,6 +12,12 @@ interface ItableProps {
 export default function Table({ products }: ItableProps) {
   return (
     <div>
+      <div className='flex items-center justify-between rounded-t-md border border-blue-200 p-2'>
+        <Search placeholder='Search by product name' />
+        <Link className='btn-primary' href='products/new'>
+          Add a new product
+        </Link>
+      </div>
       <table className='basic-table'>
         <thead>
           <tr>

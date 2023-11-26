@@ -1,9 +1,9 @@
 import React, { forwardRef, Ref } from 'react';
 
 interface InputProps extends React.HTMLProps<HTMLInputElement> {
-  id: string;
-  label: string;
-  error: string | null;
+  id?: string;
+  label?: string;
+  error?: string | null;
 }
 
 export const TextInput = forwardRef<HTMLInputElement, InputProps>(
@@ -13,7 +13,7 @@ export const TextInput = forwardRef<HTMLInputElement, InputProps>(
         <label htmlFor={id}>
           {label} <span className='text-red-500'>{error || null}</span>
         </label>
-        <input type='text' id={id} {...props} ref={ref} />
+        <input type='text' {...props} ref={ref} />
       </>
     );
   }
