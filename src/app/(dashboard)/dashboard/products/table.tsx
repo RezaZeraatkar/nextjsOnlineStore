@@ -4,12 +4,10 @@ import Link from 'next/link';
 import { IProduct } from '@/types/interfaces/product';
 import DeleteBtn from '@/components/common/Buttons/deleteBtn';
 import Search from '@/components/search/search';
+import Pagination from '@/components/pagination/Pagination';
+import { IProductData } from '@/serverActions/getProducts';
 
-interface ItableProps {
-  products: IProduct[];
-}
-
-export default function Table({ products }: ItableProps) {
+export default function Table({ products, count }: IProductData) {
   return (
     <div>
       <div className='flex items-center justify-between rounded-t-md border border-blue-200 p-2'>
@@ -76,6 +74,7 @@ export default function Table({ products }: ItableProps) {
           No products founded!
         </div>
       ) : null}
+      <Pagination count={count} />
     </div>
   );
 }

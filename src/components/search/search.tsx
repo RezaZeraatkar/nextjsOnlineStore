@@ -15,7 +15,7 @@ export default function Seach({ placeholder }: ISeachProps) {
   const { replace } = useRouter();
 
   const params = new URLSearchParams(searchParams);
-
+  params.set('page', '1');
   const handleSearch = useDebouncedCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
       if (e.target.value)

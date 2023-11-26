@@ -22,7 +22,7 @@ export const getProduct = async (
       // get product
       const product: IProduct | null = await Product.findOne({
         _id: productId,
-        user: currentUser?._id?.toString(),
+        user: currentUser?._id,
       }).lean();
       if (product)
         return {

@@ -6,11 +6,18 @@ import { IProduct } from '@/types/interfaces/product';
 import { IUser } from '@/types/interfaces/user';
 import { auth, redirectToSignIn } from '@clerk/nextjs';
 
+export interface IProductData {
+  products: IProduct[];
+  count: number;
+}
+
 export const getProducts = async (
-  q: string
-): Promise<ResponseType<IProduct[]>> => {
+  q: string,
+  page: string
+): Promise<ResponseType<IProductData>> => {
   try {
     const searchQuery = new RegExp(q, 'i');
+    const ITEMS_PER_PAGE = 5;
     await dbConnect();
     // get user _id
     const { userId } = auth();
@@ -22,15 +29,23 @@ export const getProducts = async (
     if (currentUser) {
       // get products
       const products: IProduct[] = await Product.find({
-        user: currentUser?._id?.toString(),
+        user: currentUser?._id,
         product_name: { $regex: searchQuery },
-      }).lean();
+      })
+        .limit(ITEMS_PER_PAGE)
+        .skip(ITEMS_PER_PAGE * (parseInt(page) - 1))
+        .lean();
+      // get total products
+      const count = await Product.find({
+        user: currentUser?._id,
+        product_name: { $regex: searchQuery },
+      }).count();
 
       return {
         success: true,
         status: 200,
         message: 'Products founded successfully!',
-        data: products,
+        data: { products, count },
       };
     } else {
       return redirectToSignIn();

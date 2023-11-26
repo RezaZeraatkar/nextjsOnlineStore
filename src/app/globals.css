@@ -28,6 +28,10 @@ label {
   @apply bg-blue-800 transition-all;
 }
 
+.btn-disabled {
+  @apply rounded-md bg-gray-300 px-4 py-1;
+}
+
 /* basic table styles */
 table.basic-table {
   @apply w-full rounded-md text-left;
