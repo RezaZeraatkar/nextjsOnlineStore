@@ -1,3 +1,4 @@
+import { ITEMS_PER_PAGE } from '@/globalVars';
 import Product from '@/services/db/models/product';
 import User from '@/services/db/models/user';
 import dbConnect from '@/services/db/mongoConnection';
@@ -17,7 +18,6 @@ export const getProducts = async (
 ): Promise<ResponseType<IProductData>> => {
   try {
     const searchQuery = new RegExp(q, 'i');
-    const ITEMS_PER_PAGE = 5;
     await dbConnect();
     // get user _id
     const { userId } = auth();
