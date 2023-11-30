@@ -10,7 +10,7 @@ interface ISeachProps {
   placeholder: string;
 }
 
-export default function Seach({ placeholder }: ISeachProps) {
+export default function Search({ placeholder }: ISeachProps) {
   const [isLoading, setIsLoading] = useState(false);
   const searchParams = useSearchParams();
   const pathname = usePathname();
