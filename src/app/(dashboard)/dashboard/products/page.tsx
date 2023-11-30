@@ -7,6 +7,35 @@ import DeleteBtn from '@/components/common/Buttons/deleteBtn';
 import Search from '@/components/search/search';
 import Table from '@/components/table/table';
 import Pagination from '@/components/pagination/Pagination';
+import { IProduct } from '@/types/interfaces/product';
+
+const cols = [
+  {
+    key: 'name',
+    header: 'Product name',
+    render: (row: IProduct) => <>{row.product_name}</>,
+  },
+  {
+    key: 'description',
+    header: 'Product description',
+    render: (row: IProduct) => <>{row.product_description}</>,
+  },
+  {
+    key: 'price',
+    header: 'Product price',
+    render: (row: IProduct) => <>{row.product_price}</>,
+  },
+  {
+    key: 'actions',
+    header: 'Actions',
+    render: (row: IProduct) => (
+      <div className='flex items-center'>
+        <Link href={`/dashboard/products/${row._id}`}>Edit</Link>
+        <DeleteBtn product={row} />
+      </div>
+    ),
+  },
+];
 
 export default async function Products({
   searchParams,
@@ -30,36 +59,7 @@ export default async function Products({
               Add a new product
             </Link>
           </div>
-          <Table
-            columns={[
-              {
-                key: 'name',
-                header: 'Product name',
-                render: (row) => <>{row.product_name}</>,
-              },
-              {
-                key: 'description',
-                header: 'Product description',
-                render: (row) => <>{row.product_description}</>,
-              },
-              {
-                key: 'price',
-                header: 'Product price',
-                render: (row) => <>{row.product_price}</>,
-              },
-              {
-                key: 'actions',
-                header: 'Actions',
-                render: (row) => (
-                  <div className='flex items-center'>
-                    <Link href={`/dashboard/products/${row._id}`}>Edit</Link>
-                    <DeleteBtn product={row} />
-                  </div>
-                ),
-              },
-            ]}
-            data={productsRes?.data?.products}
-          />
+          <Table columns={cols} data={productsRes?.data?.products} />
           <Pagination count={productsRes?.data?.count} />
         </Suspense>
       </div>

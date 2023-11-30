@@ -2,8 +2,9 @@ import React from 'react';
 import { createCategory } from './_actions';
 import { TextInput } from '@/components/common/Inputs/text/textInput';
 import SubmitButton from '@/components/SubmitButton/submitButton';
-import { SearchIcon } from '@/components/common/icons';
 import Search from '@/components/search/search';
+import Pagination from '@/components/pagination/Pagination';
+import Table from '@/components/table/table';
 
 export default function Categories() {
   return (
@@ -23,6 +24,8 @@ export default function Categories() {
         </form>
         <div className='w-3/4'>
           <Search placeholder='Search categories' />
+          <Table columns={[]} data={[]} />
+          <Pagination count={5} />
         </div>
       </div>
     </div>
