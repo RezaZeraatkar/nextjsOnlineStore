@@ -45,7 +45,7 @@ export const getProducts = async (
         success: true,
         status: 200,
         message: 'Products founded successfully!',
-        data: { products, count },
+        data: { products: JSON.parse(JSON.stringify(products)), count },
       };
     } else {
       return redirectToSignIn();
