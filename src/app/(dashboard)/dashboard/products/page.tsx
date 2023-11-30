@@ -1,7 +1,8 @@
 import React, { Suspense } from 'react';
 import Table from '@/app/(dashboard)/dashboard/products/table';
 import Loader from '@/components/common/Loader/loader';
-import { getProducts } from '@/serverActions/getProducts';
+import { IProductData, getProducts } from '@/serverActions/getProducts';
+import { ResponseType } from '@/types/interfaces/formactions';
 
 export default async function Products({
   searchParams,
@@ -13,7 +14,7 @@ export default async function Products({
 }) {
   const q = searchParams?.q || '';
   const page = searchParams?.page || '1';
-  const productsRes = await getProducts(q, page);
+  const productsRes: ResponseType<IProductData> = await getProducts(q, page);
 
   if (productsRes.success)
     return (
