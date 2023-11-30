@@ -6,6 +6,7 @@ import {
   ArchiveBoxIcon,
   Cog6ToothIcon,
   HomeIcon,
+  ListBulletIcon,
   QueueListIcon,
 } from '../common/icons';
 
@@ -32,6 +33,15 @@ export default function Sidebar() {
       >
         <ArchiveBoxIcon />
         <span>Products</span>
+      </Link>
+      <Link
+        href='/dashboard/categories'
+        className={
+          pathname === '/dashboard/categories' ? activeLink : inActiveLink
+        }
+      >
+        <ListBulletIcon />
+        <span>Categories</span>
       </Link>
       <Link
         href='/dashboard/orders'
