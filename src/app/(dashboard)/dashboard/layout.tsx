@@ -16,7 +16,7 @@ export default function DashboardLayout({
   return (
     <ClerkProvider>
       {/* fixed scrollable sidebar component */}
-      <div className='flex min-h-screen bg-white'>
+      <div className='flex min-h-screen overflow-hidden bg-white'>
         <header className='fixed top-0 z-50 h-16 w-full bg-gray-100 p-2 shadow-md'>
           <Header />
         </header>
