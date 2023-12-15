@@ -12,9 +12,6 @@ export type Product = z.infer<typeof productSchema>;
 
 export interface IProduct extends Product {
   _id: string;
-  product_name: string;
-  product_description: string;
-  product_price: number;
   product_images?: string[];
   product_images_public_id?: string[];
   user: mongoose.Schema.Types.ObjectId | string;

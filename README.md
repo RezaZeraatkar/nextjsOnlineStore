@@ -1,6 +1,12 @@
 # Nextjs Online Store Dashboard (Under Development)
+
 The Nextjs Online Store Dashboard is a robust platform designed to manage an online store. It’s currently under development and once completed, it will allow users to create different products and categories for their online store.
 **You can see app Demo at [https://nextjs-online-store.vercel.app/]**
+
+<div style="display:flex; justify-content: space-between;">
+<img src="https://res.cloudinary.com/db7v5ycxn/image/upload/v1702666154/github-readme-images/ry2adv3pwooirl4srb2e.png" width="48%" height="400px">
+<img src="https://res.cloudinary.com/db7v5ycxn/image/upload/v1702666161/github-readme-images/zcyzclezuwtlidypvsn7.png" width="48%" height="400px">
+</div>
 
 ## Features of the dashboard
 

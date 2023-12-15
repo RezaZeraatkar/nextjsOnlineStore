@@ -1,12 +1,12 @@
 import { Schema } from 'zod';
 
-export const safeParser = <IProduct>(schema: Schema, formdata: FormData) => {
+export const safeParser = <T>(schema: Schema, formdata: FormData) => {
   const form = Object.fromEntries(formdata.entries());
   try {
     const result = schema.parse(form);
     return {
       error: false,
-      data: result as IProduct,
+      data: result as T,
     };
   } catch (error: any) {
     console.error('safeParser Error: ', error);

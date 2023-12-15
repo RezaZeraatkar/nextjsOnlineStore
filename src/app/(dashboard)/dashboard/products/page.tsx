@@ -1,7 +1,6 @@
 import React, { Suspense } from 'react';
 import Loader from '@/components/common/Loader/loader';
-import { IProductData, getProducts } from '@/serverActions/getProducts';
-import { ResponseType } from '@/types/interfaces/formactions';
+import { getProducts } from '@/serverActions/getProducts';
 import Link from 'next/link';
 import DeleteBtn from '@/components/common/Buttons/deleteBtn';
 import Search from '@/components/search/search';
@@ -47,7 +46,7 @@ export default async function Products({
 }) {
   const q = searchParams?.q || '';
   const page = searchParams?.page || '1';
-  const productsRes: ResponseType<IProductData> = await getProducts(q, page);
+  const productsRes = await getProducts(q, page);
 
   if (productsRes.success)
     return (
@@ -59,7 +58,7 @@ export default async function Products({
               Add a new product
             </Link>
           </div>
-          <Table columns={cols} data={productsRes?.data?.products} />
+          <Table columns={cols} data={productsRes?.data?.items} />
           <Pagination count={productsRes?.data?.count} />
         </Suspense>
       </div>

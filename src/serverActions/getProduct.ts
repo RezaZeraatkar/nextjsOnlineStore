@@ -1,3 +1,4 @@
+'user server';
 import Product from '@/services/db/models/product';
 import User from '@/services/db/models/user';
 import dbConnect from '@/services/db/mongoConnection';

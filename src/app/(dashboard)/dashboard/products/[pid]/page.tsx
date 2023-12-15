@@ -1,7 +1,5 @@
 import { AddProductForm } from '@/components/forms/addProduct';
 import { getProduct } from '@/serverActions/getProduct';
-import Product from '@/services/db/models/product';
-import dbConnect from '@/services/db/mongoConnection';
 import { IProduct } from '@/types/interfaces/product';
 import Link from 'next/link';
 

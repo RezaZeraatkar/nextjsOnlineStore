@@ -1,5 +1,5 @@
 'use server';
-import { auth, currentUser } from '@clerk/nextjs';
+import { auth } from '@clerk/nextjs';
 import { safeParser } from '@/lib/zodSafeParser';
 import Product from '@/services/db/models/product';
 import dbConnect from '@/services/db/mongoConnection';

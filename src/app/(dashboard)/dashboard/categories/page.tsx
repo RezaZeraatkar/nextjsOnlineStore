@@ -1,33 +1,43 @@
 import React from 'react';
-import { createCategory } from './_actions';
-import { TextInput } from '@/components/common/Inputs/text/textInput';
-import SubmitButton from '@/components/SubmitButton/submitButton';
+import { getCategories } from './_actions';
 import Search from '@/components/search/search';
-import Pagination from '@/components/pagination/Pagination';
 import Table from '@/components/table/table';
+import Pagination from '@/components/pagination/Pagination';
+import AddCategory from '@/components/forms/addCategory';
+import { ICategory } from '@/types/interfaces/category';
 
-export default function Categories() {
-  return (
-    <div className='w-full'>
-      <h1>Categories</h1>
-      <div className='flex gap-2'>
-        <form action={createCategory} className='w-1/4'>
-          <TextInput
-            placeholder='New category'
-            label='New category'
-            id='categoryId'
-            name='category'
-            className='p-1'
-            required
-          />
-          <SubmitButton className='btn-primary'>Save</SubmitButton>
-        </form>
-        <div className='w-3/4'>
-          <Search placeholder='Search categories' />
-          <Table columns={[]} data={[]} />
-          <Pagination count={5} />
+const cols = [
+  {
+    key: 'category_name',
+    header: 'category name',
+    render: (row: ICategory) => <>{row.category_name}</>,
+  },
+];
+
+export default async function Categories({
+  searchParams,
+}: {
+  searchParams: {
+    q: string | null;
+    page: string | null;
+  };
+}) {
+  const q = searchParams?.q || '';
+  const page = searchParams?.page || '1';
+  const categories = await getCategories(q, page);
+  if (categories.success)
+    return (
+      <div className='w-full'>
+        <h1>Categories</h1>
+        <div className='flex w-full gap-5'>
+          <AddCategory />
+          <div className='w-3/4'>
+            <Search placeholder='Search categories' />
+            <Table columns={cols} data={categories?.data?.items} />
+            <Pagination count={5} />
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  else return <div>{categories.error.message}</div>;
 }
