@@ -4,7 +4,7 @@ The Nextjs Online Store Dashboard is a robust platform designed to manage an onl
 **You can see app Demo at [https://nextjs-online-store.vercel.app/]**
 
 <img src="https://res.cloudinary.com/db7v5ycxn/image/upload/v1702666154/github-readme-images/ry2adv3pwooirl4srb2e.png" height="400px">
-<img src="https://res.cloudinary.com/db7v5ycxn/image/upload/v1702666161/github-readme-images/zcyzclezuwtlidypvsn7.png" height="400px">
+<img src="https://res.cloudinary.com/db7v5ycxn/image/upload/v1702669395/github-readme-images/vwf4knvdknlialjrhat1.png" height="400px">
 
 ## Features of the dashboard
 
